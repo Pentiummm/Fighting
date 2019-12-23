@@ -1,0 +1,28 @@
+
+Warning: PHP Startup: Unable to load dynamic library 'mcrypt.so' (tried: C:\xampp\php\ext\mcrypt.so (The specified module could not be found.), C:\xampp\php\ext\php_mcrypt.so.dll (The specified module could not be found.)) in Unknown on line 0
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider {
+	/**
+	 * Register any application services.
+	 *
+	 * @return void
+	 */
+	public function register() {
+		//
+	}
+
+	/**
+	 * Bootstrap any application services.
+	 *
+	 * @return void
+	 */
+	public function boot() {
+		Schema::defaultStringLength(191);
+	}
+}
