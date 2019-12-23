@@ -54,6 +54,20 @@
                                 </div>
                                 <!-- END Header -->
 
+                                @if ( Session::has('flash_massage_error') )
+                                <div class="alert alert-danger alert-block">
+                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    <strong>{{ session('flash_massage_error') }}</strong>
+                                </div>
+                                @endif
+
+                                @if ( Session::has('flash_massage_success') )
+                                <div class="alert alert-success alert-block">
+                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    <strong>{{ session('flash_massage_success') }}</strong>
+                                </div>
+                                @endif
+
                                 <!-- Sign In Form -->
                                 <!-- jQuery Validation functionality is initialized with .js-validation-signin class in js/pages/op_auth_signin.min.js which was auto compiled from _es6/pages/op_auth_signin.js -->
                                 <!-- For more examples you can check out https://github.com/jzaefferer/jquery-validation -->
