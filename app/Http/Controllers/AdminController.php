@@ -15,7 +15,7 @@ class AdminController extends Controller
    			return redirect('/admin/dashboard');
    		} else {
             return redirect('/admin')
-               -> with('flash_massage_error', 'Email hoặc mật khẩu không đúng');
+               -> with('flash_message_error', 'Email hoặc mật khẩu không đúng');
          }
    	}
    	return view('admin.admin_login');
@@ -25,7 +25,7 @@ class AdminController extends Controller
    {
       Session::flush();
       return redirect('/admin')
-         -> with('flash_massage_success', 'Đăng xuất thành công !');
+         -> with('flash_message_success', 'Đăng xuất thành công !');
    }
 
    public function dashboard()

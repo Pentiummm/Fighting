@@ -73,10 +73,26 @@
         <div class="content-side content-side-full">
             <ul class="nav-main">
                 <li>
-                    <a class="{{ request()->is('dashboard') ? ' active' : '' }}" href="/dashboard">
+                    <a class="{{ request()->is('admin/dashboard') ? ' active' : '' }}" href="{{ url('admin/dashboard') }}">
                         <i class="si si-cup"></i><span class="sidebar-mini-hide">Dashboard</span>
                     </a>
                 </li>
+
+                <li class="{{ request()->is('admin/*') ? ' open' : '' }}">
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-bulb"></i><span class="sidebar-mini-hide">Category</span></a>
+                    <ul>
+                        <li>
+                            <a class="{{ request()->is('admin/allcategory') ? ' active' : '' }}" href="/admin/allcategory">All Category</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('admin/addcategory') ? ' active' : '' }}" href="{{ url('/admin/addcategory') }}">Add Category</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('admin/blank') ? ' active' : '' }}" href="/examples/blank">Blank</a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="nav-main-heading">
                     <span class="sidebar-mini-visible">VR</span><span class="sidebar-mini-hidden">Various</span>
                 </li>

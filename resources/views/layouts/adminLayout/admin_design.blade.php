@@ -91,6 +91,13 @@
         <!-- Laravel Scaffolding JS -->
         <script src="{{ mix('js/laravel.app.js') }}"></script>
 
+        <!-- Page JS Plugins -->
+        <script src="{{ asset('js/plugins/jquery-validation/jquery.validate.js') }}"></script>
+
+        <script src="{{ asset('js/pages/forms_validation.min.js') }}"></script>
+        
+        <script src="{{ asset('js/main.js') }}"></script>
+
         @yield('js_after')
     </body>
 </html>
