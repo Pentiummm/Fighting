@@ -93,6 +93,18 @@
                     </ul>
                 </li>
 
+                <li class="{{ request()->is('admin/*') ? ' open' : '' }}">
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-bulb"></i><span class="sidebar-mini-hide">Product</span></a>
+                    <ul>
+                        <li>
+                            <a class="{{ request()->is('admin/allproduct') ? ' active' : '' }}" href="/admin/allproduct">All Product</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('admin/addproduct') ? ' active' : '' }}" href="{{ url('/admin/addproduct') }}">Add Product</a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="nav-main-heading">
                     <span class="sidebar-mini-visible">VR</span><span class="sidebar-mini-hidden">Various</span>
                 </li>

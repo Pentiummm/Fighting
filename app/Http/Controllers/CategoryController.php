@@ -22,13 +22,16 @@ class CategoryController extends Controller
         $data = $request->all();
         $category = new Category;
         $category->name = $data['cat_name'];
+        $category->parent_id = $data['parent_id'];
         $category->url = $data['cat_url'];
         $category->description = $data['cat_description'];
         $category->save();
         return redirect('admin/allcategory')
           ->with('flash_message_success', 'Tạo mới danh mục thành công !');
       }
-      return view('admin.categories.add_category');
+      $levels = Category::where(['parent_id'=>0])->get();
+      return view('admin.categories.add_category')
+        ->with(compact('levels'));
     }
 
     public function editCategory(Request $request, $id = NULL)
@@ -38,15 +41,18 @@ class CategoryController extends Controller
         Category::where(['id'=>$id])
           ->update([
             'name' => $data['cat_name'],
+            'parent_id'=>$data['parent_id'],
             'url' => $data['cat_url'],
             'description' => $data['cat_description']
           ]);
         return redirect('admin/allcategory')
           ->with('flash_message_success', 'Cập nhật danh mục thành công !');
       }
+
       $categoryDetails = Category::where(['id'=>$id])->first();
+      $levels = Category::where(['parent_id'=>0])->get();
       return view('admin.categories.edit_category')
-        ->with(compact('categoryDetails'));
+        ->with(compact('categoryDetails', 'levels'));
     }
 
     public function deleteCategory($id = NULL)

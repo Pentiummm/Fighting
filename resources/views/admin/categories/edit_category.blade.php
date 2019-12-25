@@ -19,9 +19,20 @@
               <form class="js-validation-bootstrap" action="{{ url('admin/editcategory/'.$categoryDetails->id) }}" method="post" novalidate="novalidate">
                 {{ csrf_field() }}
                 <div class="form-group row">
-                    <label class="col-lg-4 col-form-label" for="cat-name">Name <span class="text-danger">*</span></label>
+                    <label class="col-lg-4 col-form-label" for="cat-name">Category Name <span class="text-danger">*</span></label>
                     <div class="col-lg-8">
                         <input type="text" class="form-control" id="cat-name" name="cat_name" value="{{ $categoryDetails->name }}">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-lg-4 col-form-label" for="cat-name">Category Level <span class="text-danger">*</span></label>
+                    <div class="col-lg-8">
+                        <select class="form-control" name="parent_id">
+                          <option value="0">Main Cateogry</option>
+                          @foreach($levels as $level)
+                            <option value="{{ $level->id }}">{{ $level->name }}</option>
+                          @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="form-group row">
