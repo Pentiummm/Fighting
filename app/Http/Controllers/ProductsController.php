@@ -78,4 +78,44 @@ class ProductsController extends Controller
       return view('admin.products.add_product')
         ->with(compact('categories_dropdown'));
     }
+
+    public function editProduct(Request $request, $id = NULL)
+    {
+      if($request->isMethod('post')){
+        $data = $request->all();
+        // echo '<pre>'; var_dump($data); echo '</pre>'; die;
+        Product::where(['id'=>$id])->update([
+          'category_id'=>$data['category_id'],
+          'product_name'=>$data['prod_name'],
+          'product_code'=>$data['prod_code'],
+          'product_color'=>$data['prod_color'],
+          'description'=>$data['prod_description'],
+          'price'=>$data['prod_price']
+        ]);
+
+        return redirect()->back()->with('flash_message_success', 'Cập nhật thành công !');
+      }
+
+      $productDetails = Product::where(['id'=>$id])->first();
+      $categories = Category::where(['parent_id'=>0])->get();
+      $categories_dropdown = "<option selected disable>Select</option>";
+      foreach ($categories as $cat) {
+        if($cat->id == $productDetails->category_id){
+          $selected = 'selected';
+        } else {
+          $selected = '';
+        }
+        $categories_dropdown .= "<option value='".$cat->id."' ".$selected.">".$cat->name."</option>";
+        $sub_categories = Category::where(['parent_id'=>$cat->id])->get();
+        foreach ($sub_categories as $sub_cat) {
+          if($sub_cat->id == $productDetails->category_id){
+            $selected = 'selected';
+          } else {
+            $selected = '';
+          }
+          $categories_dropdown .= "<option value='".$sub_cat->id."'".$selected.">&nbsp;--&nbsp;".$sub_cat->name."</option>";
+        }
+      }
+      return view('admin.products.edit_product', compact('productDetails', 'categories_dropdown'));
+    }
 }
