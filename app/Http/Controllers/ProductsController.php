@@ -41,10 +41,9 @@ class ProductsController extends Controller
         $product['product_color'] = $data['prod_color'];
         $product['description'] = $data['prod_description'];
         $product['price'] = $data['prod_price'];
+
         if($request->hasFile('prod_image')){
-
           $image_tmp = $request->file('prod_image');
-
           if($image_tmp->isValid()){
               $extension = $image_tmp->getClientOriginalExtension();
               $filename = rand(111,999999).'.'.$extension;
@@ -84,13 +83,33 @@ class ProductsController extends Controller
       if($request->isMethod('post')){
         $data = $request->all();
         // echo '<pre>'; var_dump($data); echo '</pre>'; die;
+
+        if($request->hasFile('prod_image')){
+          $image_tmp = $request->file('prod_image');
+          if($image_tmp->isValid()){
+              $extension = $image_tmp->getClientOriginalExtension();
+              $filename = rand(111,999999).'.'.$extension;
+              $large_image_path = 'media/backend_images/products/large/'.$filename;
+              $medium_image_path = 'media/backend_images/products/medium/'.$filename;
+              $small_image_path = 'media/backend_images/products/small/'.$filename;
+
+              // Resize Images;
+              Image::make($image_tmp)->save($large_image_path);
+              Image::make($image_tmp)->resize(600,600)->save($medium_image_path);
+              Image::make($image_tmp)->resize(300,300)->save($small_image_path);
+          }
+        } else {
+          $filename = $data['current_image'];
+        }
+
         Product::where(['id'=>$id])->update([
           'category_id'=>$data['category_id'],
           'product_name'=>$data['prod_name'],
           'product_code'=>$data['prod_code'],
           'product_color'=>$data['prod_color'],
           'description'=>$data['prod_description'],
-          'price'=>$data['prod_price']
+          'price'=>$data['prod_price'],
+          'image' => $filename
         ]);
 
         return redirect()->back()->with('flash_message_success', 'Cập nhật thành công !');
@@ -117,5 +136,16 @@ class ProductsController extends Controller
         }
       }
       return view('admin.products.edit_product', compact('productDetails', 'categories_dropdown'));
+    }
+
+    public function deleteProductImage($id = NULL)
+    {
+      Product::where(['id'=>$id])->update(['image'=>'']);
+      return redirect()->back()->with('flash_message_success', 'Xóa ảnh sản phẩm thành công !');
+    }
+
+    public function deleteProduct($id = NULL){
+      Product::where(['id'=>$id])->delete();
+      return redirect()->back()->with('flash_message_success', 'Xóa thành công !');
     }
 }

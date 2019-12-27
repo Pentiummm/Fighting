@@ -61,7 +61,7 @@
                                   <a href="{{ url('admin/editproduct/'.$product->id) }}" class="btn btn-sm btn-secondary js-tooltip-enabled" data-toggle="tooltip" title="Sửa" data-original-title="Sửa">
                                       <i class="fa fa-pencil"></i>
                                   </a>
-                                  <a href="" class="btn btn-sm btn-secondary js-tooltip-enabled" id="deleteCategory" data-toggle="tooltip" title="Xóa" data-original-title="Xóa">
+                                  <a href="{{ url('admin/deleteproduct/'.$product->id) }}" class="btn btn-sm btn-secondary js-tooltip-enabled" id="deleteCategory" data-toggle="tooltip" title="Xóa" data-original-title="Xóa">
                                       <i class="fa fa-times"></i>
                                   </a>
                               </div>

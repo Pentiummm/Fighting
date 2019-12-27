@@ -74,11 +74,19 @@
                 </div>
                 <div class="form-group row">
                     <label class="col-lg-4 col-form-label" for="prod_color">Image <span class="text-danger">*</span></label>
-                    <div class="col-lg-8">
+                    <div class="col-lg-4">
                       <div class="custom-file">
+                          <input type="hidden" name="current_image" value="{{ $productDetails->image }}">
                           <input type="file" class="custom-file-input js-custom-file-input-enabled" id="example-file-input-custom" name="prod_image" data-toggle="custom-file-input">
                           <label class="custom-file-label" for="example-file-input-custom">Choose file</label>
                       </div>
+                    </div>
+                    <div class="col-lg-4">
+                      @if(!empty ($productDetails->image))
+                          <img width="75" src="{{ asset('/media/backend_images/products/small/'.$productDetails->image) }}" alt="">
+                    
+                          <a href="{{ url('/admin/deleteproductimage/'.$productDetails->id) }}">Delete</a>
+                      @endif
                     </div>
                 </div>
 
