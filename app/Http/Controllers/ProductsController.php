@@ -148,4 +148,15 @@ class ProductsController extends Controller
       Product::where(['id'=>$id])->delete();
       return redirect()->back()->with('flash_message_success', 'Xóa thành công !');
     }
+
+    // Add Attribues
+    public function addAttribubes(Request $request, $id = NULL)
+    {
+      $productDetails = Product::where(['id'=>$id])->first();
+      if($request->isMethod('post')){
+        $data = $request->all();
+        echo '<pre>'; var_dump($data); echo '</pre>'; exit();
+      }
+      return view('admin.products.add_attributes', compact('productDetails'));
+    }
 }
