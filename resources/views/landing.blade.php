@@ -21,7 +21,7 @@
                             Codebase <span class="text-primary font-w300">3.2</span> <span class="font-w300">+ Laravel</span>
                         </h1>
                         <h2 class="h3 font-w400 text-muted mb-50 invisible" data-toggle="appear" data-class="animated fadeInDown" data-timeout="300">
-                            Welcome to themeviet !
+                            Welcome to themeviet.vn !
                         </h2>
                         <div class="invisible" data-toggle="appear" data-class="animated fadeInDown" data-timeout="300">
                             <a class="btn btn-hero btn-noborder btn-success min-width-175 mb-10 mx-5" href="/dashboard">
