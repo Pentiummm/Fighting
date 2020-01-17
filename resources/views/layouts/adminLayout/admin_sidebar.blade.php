@@ -50,7 +50,7 @@
                 </a>
                 <ul class="list-inline mt-10">
                     <li class="list-inline-item">
-                        <a class="link-effect text-dual-primary-dark font-size-xs font-w600 text-uppercase" href="javascript:void(0)">J. Smiths</a>
+                        <a class="link-effect text-dual-primary-dark font-size-xs font-w600 text-uppercase" href="javascript:void(0)">hdevvn</a>
                     </li>
                     <li class="list-inline-item">
                         <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
@@ -78,7 +78,22 @@
                     </a>
                 </li>
 
-                <li class="{{ request()->is('admin/*') ? ' open' : '' }}">
+                <li class="{{ request()->is('admin/*service*') ? ' open' : '' }}">
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-bulb"></i><span class="sidebar-mini-hide">Services</span></a>
+                    <ul>
+                        <li>
+                            <a class="{{ request()->is('admin/allservice') ? ' active' : '' }}" href="/admin/allservice">All Service</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('admin/addservice') ? ' active' : '' }}" href="{{ url('/admin/addservice') }}">Add Service</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('admin/blank') ? ' active' : '' }}" href="/examples/blank">Blank</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="{{ request()->is('admin/*category*') ? ' open' : '' }}">
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-bulb"></i><span class="sidebar-mini-hide">Category</span></a>
                     <ul>
                         <li>
@@ -93,7 +108,7 @@
                     </ul>
                 </li>
 
-                <li class="{{ request()->is('admin/*') ? ' open' : '' }}">
+                <li class="{{ request()->is('admin/*product*') ? ' open' : '' }}">
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-bulb"></i><span class="sidebar-mini-hide">Product</span></a>
                     <ul>
                         <li>

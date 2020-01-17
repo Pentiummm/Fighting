@@ -34,6 +34,7 @@
           <div class="block-content">
               <form enctype="multipart/form-data" class="js-validation-bootstrap" action="{{ url('admin/addattribute/'.$productDetails->id) }}" method="post" novalidate="novalidate">
                 {{ csrf_field() }}
+                <input type="" name="product_id" value={{$productDetails->id}}>
                 <div class="form-group row">
                     <label class="col-lg-4 col-form-label" for="prod_name">Product Name <span class="text-danger">*</span></label>
                     <div class="col-lg-8">

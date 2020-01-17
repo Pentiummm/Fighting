@@ -42,7 +42,16 @@ Route::group(['middleware' => ['auth']], function(){
   Route::match(['get', 'post'], '/admin/deleteproduct/{id}', 'ProductsController@deleteProduct');
   // Products Attributes
   Route::match(['get', 'post'], '/admin/addattribute/{id}', 'ProductsController@addAttribubes');
+
+  // Service
+  Route::match(['get', 'post'], '/admin/addservice', 'ServicesController@addService');
+
+  // Ajax Service
+  Route::get('/admin/ajaxRequest', 'ServicesController@ajaxRequest');
+  Route::post('/admin/addservice/add', 'ServicesController@ajaxRequestPost');
 });
 
 // API
 Route::get('/api/products', 'ProductsController@index');
+
+

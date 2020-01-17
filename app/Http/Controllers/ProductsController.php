@@ -8,6 +8,7 @@ use Session;
 use Image;
 use App\Product;
 use App\Category;
+use App\ProductsAttribute;
 
 
 class ProductsController extends Controller
@@ -152,10 +153,24 @@ class ProductsController extends Controller
     // Add Attribues
     public function addAttribubes(Request $request, $id = NULL)
     {
-      $productDetails = Product::where(['id'=>$id])->first();
+      $productDetails = Product::with('attributes')->where(['id'=>$id])->first();
+$productDetails = json_decode(json_encode($productDetails));
+       echo '<pre>'; print_r($productDetails); echo '</pre>'; exit();
       if($request->isMethod('post')){
         $data = $request->all();
-        echo '<pre>'; var_dump($data); echo '</pre>'; exit();
+
+        foreach ($data['sku'] as $key=>$value) {
+          if(!empty($value)){
+            $attribute = new ProductsAttribute;
+            $attribute->product_id = $id;
+            $attribute->sku = $value;
+            $attribute->size = $data['size'][$key];
+            $attribute->price = $data['price'][$key];
+            $attribute->stock = $data['stock'][$key];
+            $attribute->save();
+          }
+        }
+        return redirect('admin/addattribue/'.$id)->with('flash_message_success', 'Thêm thuộc tính thành công !');
       }
       return view('admin.products.add_attributes', compact('productDetails'));
     }

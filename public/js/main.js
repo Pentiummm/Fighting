@@ -6,6 +6,38 @@ $(document).ready(function(){
     return false;
   });
 
+  $(".btn-submit-service").click(function(e){
+
+      e.preventDefault();
+
+      var _token = $("input[name='_token']").val();
+      var name = $("input[name='service_name']").val();
+      var code= $("input[name='tpl_code']").val();
+
+      $.ajax({
+          url: "/admin/addservice/add",
+          type:'POST',
+          data: {_token:_token, name:name, code:code},
+          success: function(data) {
+             console.log(data);
+              if($.isEmptyObject(data.error)){
+                  console.log(data.success);
+              }else{
+                  printErrorMsg(data.error);
+              }
+          }
+      });
+
+  });
+
+  function printErrorMsg (msg) {
+      $(".print-error-msg").find("ul").html('');
+      $(".print-error-msg").css('display','block');
+      $.each( msg, function( key, value ) {
+          $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+      });
+  }
+
 
   $(document).ready(function(){
       var maxField = 10; //Input fields increment limitation
