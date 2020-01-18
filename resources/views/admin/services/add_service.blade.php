@@ -22,6 +22,8 @@
                 <strong>{{ session('flash_message_success') }}</strong>
             </div>
             @endif
+            
+            <div id="success_message"></div>
 
         <div class="block">
           <div class="block-header block-header-default">
@@ -51,9 +53,16 @@
 
                 <div class="form-group row">
                     <div class="col-lg-8 ml-auto">
-                        <button type="submit" class="btn btn-alt-primary btn-submit-service">Submit</button>
+                        <button type="submit" class="btn btn-alt-primary btn-submit-service" id="submit_handle">Submit</button>
                     </div>
                 </div>
+
+                <div class="form-group" id="process" style="display:none;">
+                   <div class="progress">
+                      <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" style=""></div>
+                   </div>
+                </div>
+
             </form>
           </div>
       </div>

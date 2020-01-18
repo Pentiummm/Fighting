@@ -49,6 +49,7 @@ Route::group(['middleware' => ['auth']], function(){
   // Ajax Service
   Route::get('/admin/ajaxRequest', 'ServicesController@ajaxRequest');
   Route::post('/admin/addservice/add', 'ServicesController@ajaxRequestPost');
+  Route::match(['get', 'post'], '/admin/addservice/addsubdomain', 'ServicesController@addSubDomain');
 });
 
 // API
