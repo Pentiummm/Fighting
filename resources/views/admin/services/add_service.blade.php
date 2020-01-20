@@ -50,13 +50,33 @@
                         <input type="text" class="form-control" id="tpl_code" name="tpl_code" placeholder="Your Template Code..">
                     </div>
                 </div>
+                <div class="form-group row">
+                    <label class="col-lg-4 col-form-label" for="name_customer">Name Customer <span class="text-danger">*</span></label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" id="name_customer" name="name_customer" placeholder="...">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-lg-4 col-form-label" for="email_customer">Email Customer <span class="text-danger">*</span></label>
+                    <div class="col-lg-8">
+                        <input type="email" class="form-control" id="email_customer" name="email_customer" placeholder="...">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-lg-4 col-form-label" for="ftp_password">FTP Password <span class="text-danger">*</span></label>
+                    <div class="col-lg-8">
+                      <input type="text" class="form-control" id="ftp_password" name="ftp_password" value="{{ str_random(8) }}">
+                    </div>
+                </div>
 
                 <div class="form-group row">
                     <div class="col-lg-8 ml-auto">
                         <button type="submit" class="btn btn-alt-primary btn-submit-service" id="submit_handle">Submit</button>
                     </div>
                 </div>
-
+            
                 <div class="form-group" id="process" style="display:none;">
                    <div class="progress">
                       <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" style=""></div>

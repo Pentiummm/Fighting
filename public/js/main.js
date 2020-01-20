@@ -10,70 +10,103 @@ $(document).ready(function(){
     
     e.preventDefault();
     
-    var _token = $("input[name='_token']").val();
-    var name = $("input[name='service_name']").val();
-    var code= $("input[name='tpl_code']").val();
+    var form_datas = $( "form" ).serialize();
 
-    var timer = setTimeout(function(){
-      percentage = 5;
-      progress_bar_process(percentage, timer);
-    }, 2000);
-
-    var timer = setTimeout(function(){
-      percentage = 10;
-      progress_bar_process(percentage, timer);
-    }, 4000);
-
-    function step2(){
+    function step4(){
        $.ajax({
-          url:"process.php",
+          url:"/admin/addservice/upsource",
           method: 'POST',
-          data:$(this).serialize(),
-          success:function(data){
-             console.log('step2 (create ftp)');
-             var percentage = 20;
-             if (data = 'done2') {
+          data:form_datas,
+          success:function(res){
+             console.log('step4 (remove file, upload source)');
+             console.log(res);
+             if (res) {
                 var timer = setTimeout(function(){
-                   percentage = percentage + 20;
-                   progress_bar_process(percentage, timer);
+                  progress_bar_process(80, timer);
                 }, 1000);
-
-                console.log('  --> step2 -> done');
-             } else {
-                console.log('  --> step2 -> error');
+                console.log('  --> step4 -> done');
+              } else {
+                console.log('  --> step4 -> error');
              }
           }
        });
     }
 
+    function step3(){
+       $.ajax({
+          url:"/admin/addservice/addftp",
+          method: 'POST',
+          data:form_datas,
+          success:function(res){
+             console.log('step3 (create ftp)');
+             if (res.result = 'ok') {
+                var timer = setTimeout(function(){
+                  progress_bar_process(60, timer);
+                }, 1000);
+                console.log('  --> step3 -> done');
+                var timer = setTimeout(function(){
+                   step4();
+                }, 1000);
+              } else {
+                console.log('  --> step3 -> error');
+             }
+          }
+       });
+    }
+
+    function step2(){
+      $.ajax({
+        url: "/admin/addservice/addsubdomain",
+        type:'POST',
+        data: form_datas,
+        beforeSend:function() {
+          $('#submit_handle').attr('disabled', 'disabled');
+          $('#process').css('display', 'block');
+        },
+        success: function(res) {
+          if(res.result = 'ok'){
+            console.log('step2 (create subdomain)');
+            var timer = setTimeout(function(){
+              progress_bar_process(40, timer);
+            }, 2000);
+            console.log('  --> step2 -> done');
+            var timer = setTimeout(function(){
+               step3();
+            }, 1000);
+          } else {
+            console.log('  --> step2 -> error');
+          }
+          /* if( $.isEmptyObject(data.error) ){ console.log(data.success); } else { printErrorMsg(data.error); } */
+        }
+      });
+    }
+
     $.ajax({
-      url: "/admin/addservice/addsubdomain",
+      url: "/admin/addservice/add",
       type:'POST',
-      data: {_token:_token, name:name, code:code},
+      data: form_datas,
       beforeSend:function() {
         $('#submit_handle').attr('disabled', 'disabled');
         $('#process').css('display', 'block');
       },
-      success: function(data) {
-        console.log(data);
-        var percentage = 0;
-
-        if(data.result = 'ok'){
-          console.log('step1 (create subdomain)');
+      success: function(res) {
+        
+        if(res['success'] == 'ok'){
+          console.log('step1 (add db)');
           var timer = setTimeout(function(){
-            percentage = percentage + 20;
-            progress_bar_process(percentage, timer);
-          }, 1000);
+            progress_bar_process(20, timer);
+          }, 3000);
           console.log('  --> step1 -> done');
           var timer = setTimeout(function(){
-             step2();
+            step2();
           }, 1000);
         } else {
           console.log('  --> step1 -> error');
         }
-        /* if( $.isEmptyObject(data.error) ){ console.log(data.success); } else { printErrorMsg(data.error); } */
+
       }
     });
+
   });
 
   function progress_bar_process(percentage, timer) {

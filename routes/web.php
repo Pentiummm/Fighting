@@ -44,12 +44,15 @@ Route::group(['middleware' => ['auth']], function(){
   Route::match(['get', 'post'], '/admin/addattribute/{id}', 'ProductsController@addAttribubes');
 
   // Service
-  Route::match(['get', 'post'], '/admin/addservice', 'ServicesController@addService');
-
+  Route::get('/admin/allservice', 'ServicesController@allService');
+  Route::match(['get', 'post'], '/admin/addservice', 'ServicesController@index');
   // Ajax Service
-  Route::get('/admin/ajaxRequest', 'ServicesController@ajaxRequest');
-  Route::post('/admin/addservice/add', 'ServicesController@ajaxRequestPost');
+  // Route::get('/admin/ajaxRequest', 'ServicesController@ajaxRequest');
+  // Route::post('/admin/addservice/add', 'ServicesController@ajaxRequestPost');
+  Route::match(['get', 'post'], '/admin/addservice/add', 'ServicesController@add');
   Route::match(['get', 'post'], '/admin/addservice/addsubdomain', 'ServicesController@addSubDomain');
+  Route::match(['get', 'post'], '/admin/addservice/addftp', 'ServicesController@createFtp');
+  Route::match(['get', 'post'], '/admin/addservice/upsource', 'ServicesController@clearAndUpSource');
 });
 
 // API
