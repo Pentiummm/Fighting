@@ -147,8 +147,87 @@ class ServicesController extends Controller
     
     }
 
-    public function clearAndUpSource(Request $request) {
+    public function createDatabase(Request $request) {
+        $datas = $request->all();
 
+        $plesk_client = new PleskApiClient( $this->setting('host') );
+        $plesk_client->setCredentials( $this->setting('login'), $this->setting('password') );
+
+        $request_get_info = '
+            <packet>
+                <site>
+                    <get>
+                        <filter>
+                            <name>'.$this->setting('webspace_name').'</name>
+                        </filter>
+                        <dataset>
+                            <hosting/>
+                        </dataset>
+                    </get>
+                </site>
+            </packet>
+        ';
+
+        $response_get_info = $plesk_client->request($request_get_info);
+        $xml_response_info = simplexml_load_string($response_get_info) or die("Error: Cannot create object");
+        $status_get_info = $xml_response_info->site->get->result->status;
+        $id_site = $xml_response_info->site->get->result->id;
+
+        if($id_site){
+
+            $request_new_database = '
+                <packet>
+                    <database>
+                        <add-db>
+                            <webspace-id>'.$id_site.'</webspace-id>
+                            <name>db_'.$datas["service_name"].'</name>
+                            <type>mysql</type>
+                        </add-db>
+                    </database>
+                </packet>
+            ';
+
+            $response_new_db = $plesk_client->request($request_new_database);
+            $xml_response_new_db = simplexml_load_string($response_new_db) or die("Error: Cannot create object");
+            $adddb = 'add-db';
+            $id_db = $xml_response_new_db->database->$adddb->result->id;
+
+            if($id_db){
+                $request_new_database_user = '
+                    <packet>
+                        <database>
+                            <add-db-user>
+                                <db-id>'.$id_db.'</db-id>
+                                <login>dbu_'.$datas["service_name"].'</login>
+                                <password>'.$datas["ftp_password"].'</password>
+                            </add-db-user>
+                        </database>
+                    </packet>
+                ';
+                $response_new_db_user = $plesk_client->request($request_new_database_user);
+                $xml_response_new_db_user = simplexml_load_string($response_new_db_user) or die("Error");
+                $adddb_user = 'add-db-user';
+                $status = $xml_response_new_db_user->database->$adddb_user->result->status;
+
+                if($status == 'ok'){
+
+                    $user  = 'dbu_'.$datas["service_name"];
+                    $pass = $datas["ftp_password"];
+                    $$dbname = 'db_'.$datas["service_name"];
+                    
+                    $datas = $request->all();
+                    $extract = '://'.$datas["service_name"].'.'.$this->setting('webspace_name').'/install.php';
+                    $result_extra = file_get_contents($extract);
+
+                    // $this->importDb('data.sql', $this->setting('host'), $user, $pass, $dbname);
+                }
+            }
+        }
+
+        return response()->json(['result_info' => $status_get_info, 'id' => $id_site, 'result_db' => $xml_response_new_db, 'result_db_user' => $xml_response_new_db_user, 'result' => $status, 'result_extra' => $result_extra]);  
+    }
+
+    public function clearAndUpSource(Request $request) {
         $datas = $request->all();
       
         $ftp = new FtpClient();
@@ -161,16 +240,34 @@ class ServicesController extends Controller
            'empty_fonts' => $ftp->cleanDir('./fonts'),
            'empty_f_img' => $ftp->rmdir('./img'), // Xóa thư mục
            'empty_f_fonts' => $ftp->rmdir('./fonts'), // Xóa thư mục
-           'upload_source' => $ftp->put('./source.zip', 'https://miyvietnam.com/car.zip', FTP_BINARY)
+           'upload_source' => $ftp->put('./source.zip', 'https://miyvietnam.com/car.zip', FTP_BINARY),
+           'upload_install_file' => $ftp->put('./install.php', 'https://miyvietnam.com/install.php', FTP_BINARY)
         ]);
+    }  
+
+    public function importDb($file_name, $host, $user, $pass, $dbname){
+        $conn =new mysqli($host, $user, $pass , $dbname);
+        $query = '';
+        $sqlScript = file($file_name);
+        foreach ($sqlScript as $line)   {
+            
+            $startWith = substr(trim($line), 0 ,2);
+            $endWith = substr(trim($line), -1 ,1);
+            
+            if (empty($line) || $startWith == '--' || $startWith == '/*' || $startWith == '//') {
+                continue;
+            }
+                
+            $query = $query . $line;
+            if ($endWith == ';') {
+                mysqli_query($conn,$query) or die('Problem in executing the SQL query <b>' . $query. '</b>');
+                $query= '';     
+            }
+        }
+        return 'done';
     }
 
-    function upload_file_to_subdomain( $ftp, $target_directory, $source_directory, $mode = FTP_BINARY ){
-        // $source_directory = "http://ftpupload.webthongminh.info/Upload/wp-login.zip";
-        // $target_directory = "images/wp-login.zip";
-        $result = $ftp->put( $target_directory, $source_directory, $mode );
-        return $result;
-    }
+    // unlink( ROOT_PATH.'/commit.php' ); xóa file
 
     public function ajaxRequest() {
         return view('ajaxRequest');

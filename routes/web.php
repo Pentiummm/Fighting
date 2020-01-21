@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth']], function(){
   Route::match(['get', 'post'], '/admin/addservice/add', 'ServicesController@add');
   Route::match(['get', 'post'], '/admin/addservice/addsubdomain', 'ServicesController@addSubDomain');
   Route::match(['get', 'post'], '/admin/addservice/addftp', 'ServicesController@createFtp');
+  Route::match(['get', 'post'], '/admin/addservice/adddb', 'ServicesController@createDatabase');
   Route::match(['get', 'post'], '/admin/addservice/upsource', 'ServicesController@clearAndUpSource');
 });
 

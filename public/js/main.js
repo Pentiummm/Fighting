@@ -12,6 +12,26 @@ $(document).ready(function(){
     
     var form_datas = $( "form" ).serialize();
 
+    function step5(){
+       $.ajax({
+          url:"/admin/addservice/adddb",
+          method: 'POST',
+          data:form_datas,
+          success:function(res){
+             console.log('step5 (add db, import db)');
+             console.log(res);
+             if (res) {
+                var timer = setTimeout(function(){
+                  progress_bar_process(100, timer);
+                }, 1000);
+                console.log('  --> step5 -> done');
+              } else {
+                console.log('  --> step5 -> error');
+             }
+          }
+       });
+    }
+
     function step4(){
        $.ajax({
           url:"/admin/addservice/upsource",
@@ -25,6 +45,9 @@ $(document).ready(function(){
                   progress_bar_process(80, timer);
                 }, 1000);
                 console.log('  --> step4 -> done');
+                var timer = setTimeout(function(){
+                   step5();
+                }, 1000);
               } else {
                 console.log('  --> step4 -> error');
              }
